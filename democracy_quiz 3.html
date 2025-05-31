@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will Democracy Survive? Take This $1 Test!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 50%, #7c2d12 100%);
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fbbf24, #f59e0b, #dc2626);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .quiz-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.2);
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .question {
+            margin-bottom: 25px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideIn 0.6s ease-out forwards;
+        }
+
+        .question:nth-child(1) { animation-delay: 0.3s; }
+        .question:nth-child(2) { animation-delay: 0.4s; }
+        .question:nth-child(3) { animation-delay: 0.5s; }
+        .question:nth-child(4) { animation-delay: 0.6s; }
+        .question:nth-child(5) { animation-delay: 0.7s; }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #fbbf24;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .option:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(251, 191, 36, 0.5);
+            transform: translateX(5px);
+        }
+
+        .option.selected {
+            background: rgba(251, 191, 36, 0.3);
+            border-color: #fbbf24;
+            transform: scale(1.02);
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(45deg, #dc2626, #b91c1c);
+            color: white;
+            border: none;
+            padding: 18px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 15px;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(220, 38, 38, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(220, 38, 38, 0.4);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .results {
+            display: none;
+            text-align: center;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .score-display {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #fbbf24;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .category {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            opacity: 0.9;
+        }
+
+        .share-btn {
+            background: linear-gradient(45deg, #1d4ed8, #2563eb);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 15px rgba(29, 78, 216, 0.3);
+        }
+
+        .share-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(29, 78, 216, 0.4);
+        }
+
+        .retake-btn {
+            background: transparent;
+            color: #fbbf24;
+            border: 2px solid #fbbf24;
+            padding: 12px 25px;
+            font-size: 1rem;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .retake-btn:hover {
+            background: #fbbf24;
+            color: #1e3a8a;
+        }
+
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .floating-star {
+            position: absolute;
+            color: rgba(251, 191, 36, 0.3);
+            font-size: 20px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            33% {
+                transform: translateY(-20px) rotate(120deg);
+            }
+            66% {
+                transform: translateY(-10px) rotate(240deg);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .title {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            .quiz-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements">
+        <div class="floating-star" style="top: 10%; left: 10%; animation-delay: 0s;">⭐</div>
+        <div class="floating-star" style="top: 20%; right: 15%; animation-delay: 1s;">🇺🇸</div>
+        <div class="floating-star" style="top: 60%; left: 5%; animation-delay: 2s;">⚖️</div>
+        <div class="floating-star" style="bottom: 20%; right: 10%; animation-delay: 3s;">🗽</div>
+        <div class="floating-star" style="bottom: 40%; left: 20%; animation-delay: 4s;">📊</div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1 class="title">Will Democracy Survive?</h1>
+            <p class="subtitle">Take This $1 Test!</p>
+            <p style="font-size: 0.9rem; opacity: 0.8;">60 seconds • 5 questions • Share your score</p>
+        </div>
+
+        <div class="quiz-container">
+            <div id="quiz-questions">
+                <div class="question">
+                    <div class="question-text">1. How much do you trust that your vote will be counted accurately in the next election?</div>
+                    <div class="options">
+                        <div class="option" data-value="3">Completely trust - our election systems are secure</div>
+                        <div class="option" data-value="2">Mostly trust - some concerns but overall confident</div>
+                        <div class="option" data-value="1">Somewhat trust - have significant doubts</div>
+                        <div class="option" data-value="0">Don't trust at all - the system is rigged</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">2. When political leaders make decisions that go against public opinion, what's your reaction?</div>
+                    <div class="options">
+                        <div class="option" data-value="3">That's democracy - representatives should use their judgment</div>
+                        <div class="option" data-value="2">Disappointing but part of the process</div>
+                        <div class="option" data-value="1">Frustrating - they should always follow the majority</div>
+                        <div class="option" data-value="0">Proof the system doesn't represent us</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">3. How do you feel about people with vastly different political views than yours?</div>
+                    <div class="options">
+                        <div class="option" data-value="3">We can disagree and still be fellow Americans</div>
+                        <div class="option" data-value="2">Hard to understand but I respect their right to differ</div>
+                        <div class="option" data-value="1">Concerning - they're misguided but not enemies</div>
+                        <div class="option" data-value="0">They're a threat to everything I believe in</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">4. If your preferred candidate loses a close election, what would you want them to do?</div>
+                    <div class="options">
+                        <div class="option" data-value="3">Concede gracefully and work with the winner</div>
+                        <div class="option" data-value="2">Request a recount if legally possible, then accept results</div>
+                        <div class="option" data-value="1">Challenge suspicious results through all legal means</div>
+                        <div class="option" data-value="0">Fight by any means necessary - the stakes are too high</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">5. What's your biggest concern about America's democratic future?</div>
+                    <div class="options">
+                        <div class="option" data-value="0">Democracy is already broken beyond repair</div>
+                        <div class="option" data-value="1">We're heading toward authoritarianism fast</div>
+                        <div class="option" data-value="2">Serious problems but still fixable</div>
+                        <div class="option" data-value="3">Challenges exist but democracy will adapt and survive</div>
+                    </div>
+                </div>
+
+                <button class="submit-btn" id="submit-btn" disabled>Get Your Democracy Score!</button>
+            </div>
+
+            <div id="results" class="results">
+                <div class="score-display" id="score-display"></div>
+                <div class="category" id="category"></div>
+                <div class="description" id="description"></div>
+                <button class="share-btn" onclick="shareResults()">📱 Share Your Score!</button>
+                <button class="retake-btn" onclick="retakeQuiz()">Take Quiz Again</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let answers = {};
+        let totalQuestions = 5;
+
+        // Add event listeners to all options
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                const question = this.closest('.question');
+                const questionIndex = Array.from(document.querySelectorAll('.question')).indexOf(question);
+                
+                // Remove selected class from other options in this question
+                question.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+                
+                // Add selected class to clicked option
+                this.classList.add('selected');
+                
+                // Store answer
+                answers[questionIndex] = parseInt(this.dataset.value);
+                
+                // Check if all questions are answered
+                if (Object.keys(answers).length === totalQuestions) {
+                    document.getElementById('submit-btn').disabled = false;
+                }
+            });
+        });
+
+        // Submit button handler
+        document.getElementById('submit-btn').addEventListener('click', function() {
+            calculateResults();
+        });
+
+        function calculateResults() {
+            const totalScore = Object.values(answers).reduce((sum, score) => sum + score, 0);
+            
+            let category, description;
+            
+            if (totalScore >= 12) {
+                category = "🛡️ Democracy Defender";
+                description = "You're a Democracy Defender, ready to stand up for freedom and fairness! Your faith in democratic institutions and respect for diverse viewpoints makes you a guardian of American values. Keep defending what matters most!";
+            } else if (totalScore >= 9) {
+                category = "⚔️ Democracy Warrior";
+                description = "You're a Democracy Warrior, fighting for what's right while staying true to democratic principles! You see the challenges but believe in working within the system to create positive change. Your voice matters now more than ever!";
+            } else if (totalScore >= 6) {
+                category = "👀 Democracy Watcher";
+                description = "You're a Democracy Watcher, keeping a careful eye on our nation's direction. Your cautious optimism and healthy skepticism are exactly what democracy needs. Stay engaged - your participation is crucial!";
+            } else {
+                category = "🤔 Democracy Skeptic";
+                description = "You're a Democracy Skeptic, questioning whether our system can truly serve the people. Your concerns reflect real frustrations many Americans share. Consider how you can help build the change you want to see!";
+            }
+            
+            // Display results
+            document.getElementById('score-display').textContent = `${totalScore}/15`;
+            document.getElementById('category').textContent = category;
+            document.getElementById('description').textContent = description;
+            
+            // Hide quiz, show results
+            document.getElementById('quiz-questions').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+        }
+
+        function shareResults() {
+            const category = document.getElementById('category').textContent;
+            const score = document.getElementById('score-display').textContent;
+            const text = `I just took the "Will Democracy Survive?" test and scored ${score} as a ${category}! How strong is YOUR faith in American democracy? Take the $1 test: ${window.location.href}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Will Democracy Survive? Test Results',
+                    text: text,
+                    url: window.location.href
+                });
+            } else {
+                // Fallback - copy to clipboard
+                navigator.clipboard.writeText(text).then(() => {
+                    alert('Results copied to clipboard! Share on your favorite social media platform.');
+                });
+            }
+        }
+
+        function retakeQuiz() {
+            answers = {};
+            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            document.getElementById('submit-btn').disabled = true;
+            document.getElementById('quiz-questions').style.display = 'block';
+            document.getElementById('results').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
